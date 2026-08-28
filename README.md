@@ -4,7 +4,6 @@ Phân tích dữ liệu bán hàng thương mại điện tử Brazil nhằm tr�
 
 Dự án mô phỏng đầy đủ quy trình làm việc thực tế của một Data Analyst: từ làm sạch dữ liệu thô, mô hình hóa và phân tích bằng SQL, đến trực quan hóa insight trên dashboard tương tác.
 
-![Dashboard Overview](images/dashboard_overview.png)
 
 ---
 
