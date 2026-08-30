@@ -1,8 +1,12 @@
 # 🛒 Olist E-Commerce Analysis — Python | SQL | Power BI
 
-Phân tích dữ liệu bán hàng thương mại điện tử Brazil nhằm trả lời 3 câu hỏi kinh doanh cốt lõi: **Tình hình kinh doanh hiện tại ra sao? Ai là khách hàng tốt nhất? Điều gì đang cản trở tăng trưởng?**
+## Bối cảnh 
 
-Dự án mô phỏng đầy đủ quy trình làm việc thực tế của một Data Analyst: từ làm sạch dữ liệu thô, mô hình hóa và phân tích bằng SQL, đến trực quan hóa insight trên dashboard tương tác.
+Olist là sàn thương mại điện tử kết nối các nhà bán hàng nhỏ lẻ tại Brazil với nhiều kênh bán hàng khác nhau. Nhìn vào dữ liệu 2016–2018, doanh thu tăng trưởng ổn định qua từng tháng — nhưng con số tổng quan này chưa nói lên liệu sự tăng trưởng đó có bền vững hay không.
+
+**Câu hỏi đặt ra:** Olist đang tăng trưởng, nhưng có đang giữ được khách hàng quay lại không? Nếu không, điều gì trong trải nghiệm khách hàng (giao hàng, chất lượng sản phẩm) có thể là nguyên nhân?
+
+Dự án này đi tìm câu trả lời bằng cách chia thành 3 lớp điều tra: tình hình chung → hành vi khách hàng → các yếu tố vận hành có thể đang cản trở retention. Toàn bộ quy trình mô phỏng công việc thực tế của Data Analyst: làm sạch dữ liệu thô, phân tích bằng SQL, trực quan hóa trên dashboard.
 
 
 ---
@@ -22,13 +26,13 @@ Dự án mô phỏng đầy đủ quy trình làm việc thực tế của một
 
 ## Tổng quan dự án
 
-**Olist** là một sàn thương mại điện tử tại Brazil, kết nối các nhà bán hàng nhỏ lẻ với nhiều kênh bán hàng khác nhau. Dự án sử dụng bộ dữ liệu công khai **Brazilian E-Commerce Public Dataset** (~100.000 đơn hàng, 2016–2018) để trả lời 3 nhóm câu hỏi:
+Dự án sử dụng bộ dữ liệu công khai **Brazilian E-Commerce Public Dataset** (~100.000 đơn hàng, 2016–2018), tiếp cận theo hướng trả lời câu hỏi retention đặt ra ở trên, chia thành 3 lớp điều tra:
 
-| Phần | Câu hỏi kinh doanh |
+| Phần | Vai trò trong việc trả lời câu hỏi chính |
 |---|---|
-| **1. Business Overview** | Doanh thu, số đơn hàng, giá trị đơn trung bình đang ở mức nào? Xu hướng tăng trưởng ra sao? Danh mục sản phẩm nào đóng góp doanh thu nhiều nhất? |
-| **2. Who are our best customers?** | Khách hàng chi tiêu nhiều nhất là ai? Bao nhiêu % khách hàng quay lại mua thêm? |
-| **3. What's holding us back?** | Khu vực nào giao hàng chậm nhất? Danh mục sản phẩm nào bị đánh giá thấp nhất? |
+| **1. Business Overview** | Xác lập bức tranh nền: doanh thu, đơn hàng, AOV, xu hướng tăng trưởng theo tháng, danh mục chủ lực — để biết "tăng trưởng" đang thực sự đến từ đâu |
+| **2. Who are our best customers?** | Đo lường trực tiếp mức độ giữ chân khách hàng: bao nhiêu % quay lại mua, ai là nhóm chi tiêu nhiều nhất |
+| **3. What's holding us back?** | Tìm nguyên nhân tiềm năng phía vận hành: thời gian giao hàng theo khu vực, điểm đánh giá theo danh mục sản phẩm — những yếu tố có thể ảnh hưởng đến việc khách có quay lại hay không |
 
 **Luồng xử lý dữ liệu:**
 
@@ -116,11 +120,28 @@ Dashboard 1 trang, kết nối trực tiếp SQL Server → Power BI (Import mod
 
 ## Insight chính
 
-- 📈 **Doanh thu tăng trưởng mạnh trong 2017**, đạt đỉnh vào tháng 11/2017 (mùa mua sắm cuối năm), sau đó bước vào giai đoạn ổn định/bão hòa trong suốt 2018.
-- 💄 **`health_beauty`** là danh mục đóng góp doanh thu lớn nhất, theo sau bởi `watches_gifts` và `bed_bath_table`.
-- ⚠️ **97% khách hàng chỉ mua đúng 1 lần**, chỉ 3% quay lại mua thêm — đây là vấn đề retention nghiêm trọng, gợi ý doanh nghiệp nên đầu tư vào chương trình giữ chân khách hàng thay vì chỉ tập trung vào thu hút khách mới.
-- 🚚 **Khu vực miền Bắc Brazil (RR, AP, AM)** có thời gian giao hàng trung bình 26–29 ngày, gấp hơn 3 lần so với **São Paulo** (8 ngày) — phản ánh rõ khoảng cách địa lý và hạ tầng logistics ảnh hưởng trực tiếp đến trải nghiệm khách hàng.
-- ⭐ **`office_furniture`** là danh mục bị đánh giá thấp nhất (3.49/5), trong khi các danh mục **sách** đều đạt trên 4.3/5 — gợi ý vấn đề chất lượng đóng gói/vận chuyển với các mặt hàng cồng kềnh, dễ hư hỏng.
+- 📈 **Doanh thu tăng trưởng mạnh trong 2017**, đạt đỉnh vào tháng 11/2017 (mùa mua sắm cuối năm), sau đó bước vào giai đoạn ổn định/bão hòa trong suốt 2018. Đáng chú ý: tăng trưởng này diễn ra trong khi retention (xem bên dưới) rất thấp — nghĩa là doanh thu đang được kéo chủ yếu bởi **thu hút khách mới liên tục**, không phải nhờ khách cũ quay lại. Đây là mô hình tăng trưởng tốn kém và rủi ro hơn về dài hạn so với việc tăng trưởng dựa trên khách hàng trung thành.
+
+- 💄 **`health_beauty`** là danh mục đóng góp doanh thu lớn nhất, theo sau bởi `watches_gifts` và `bed_bath_table`. Đây đều là các nhóm sản phẩm có tần suất mua **thấp** (không phải hàng tiêu dùng nhanh) — một phần lý giải vì sao tỷ lệ mua lại của Olist thấp hơn các mô hình FMCG, nơi khách hàng tự nhiên quay lại mua theo chu kỳ.
+
+- ⚠️ **97% khách hàng chỉ mua đúng 1 lần**, chỉ 3% quay lại mua thêm — đây là vấn đề retention nghiêm trọng. Kết hợp với insight về danh mục sản phẩm ở trên, nguyên nhân có thể đến từ 2 phía: (1) đặc thù ngành hàng ít mua lặp lại, và (2) trải nghiệm sau mua chưa đủ tốt để tạo động lực quay lại — được củng cố bởi 2 insight vận hành bên dưới.
+
+- 🚚 **Khu vực miền Bắc Brazil (RR, AP, AM)** có thời gian giao hàng trung bình 26–29 ngày, gấp hơn 3 lần so với **São Paulo** (8 ngày). Nếu retention ở các khu vực này thấp hơn đáng kể so với SP, đây sẽ là bằng chứng khá rõ cho thấy **trải nghiệm giao hàng chậm là một nguyên nhân trực tiếp khiến khách không quay lại** — không chỉ đơn thuần là vấn đề logistics.
+
+- ⭐ **`office_furniture`** là danh mục bị đánh giá thấp nhất (3.49/5), trong khi các danh mục **sách** đều đạt trên 4.3/5. Điểm chung của các danh mục bị đánh giá thấp thường là sản phẩm cồng kềnh, dễ hư hỏng khi vận chuyển — gợi ý vấn đề nằm ở **quy trình đóng gói/vận chuyển** hơn là chất lượng sản phẩm gốc, và đây cũng là một mắt xích trong bài toán retention tổng thể.
+
+---
+
+## Đề xuất hành động (Recommendations)
+
+Dựa trên các insight trên, đây là những hướng hành động cụ thể Olist có thể cân nhắc:
+
+1. **Ưu tiên chương trình giữ chân khách hàng cho lần mua thứ 2** — ví dụ mã giảm giá có thời hạn gửi sau đơn hàng đầu tiên, thay vì tiếp tục dồn ngân sách marketing cho việc thu hút khách hoàn toàn mới.
+2. **Điều tra sâu hơn mối liên hệ giữa thời gian giao hàng và tỷ lệ quay lại theo từng khu vực** — nếu xác nhận đúng, nên cân nhắc kho hàng vệ tinh hoặc đối tác vận chuyển riêng cho khu vực miền Bắc.
+3. **Rà soát quy trình đóng gói cho nhóm hàng cồng kềnh** (nội thất, đồ gia dụng lớn) — đây là nhóm có điểm đánh giá thấp nhất, khả năng cao liên quan đến hư hỏng khi vận chuyển.
+4. **Cân nhắc bổ sung danh mục sản phẩm có tần suất mua cao hơn** để tự nhiên thúc đẩy tỷ lệ mua lại, thay vì phụ thuộc hoàn toàn vào các danh mục mua không thường xuyên hiện tại.
+
+> 📝 *Lưu ý: đây là các đề xuất mang tính giả thuyết dựa trên dữ liệu quan sát được (correlation), chưa phải kết luận nhân quả (causation) — cần thêm phân tích/thử nghiệm A/B để xác nhận trước khi triển khai thực tế.*
 
 ---
 
